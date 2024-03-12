@@ -5,43 +5,62 @@
 - 1 G5.4xlarge launched with Ubuntu as the operating system, specifically using this AMI in the US-East-1 region: `ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20231207`
 
 ## Configure EC2 instance
+- Install the NVIDIA drivers according to the [AWS documentation here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-nvidia-driver.html#nvidia-GRID-driver).
 
+- For Ubuntu, some of the instructions above don't apply since Ubuntu does not use `yum`. You can follow the steps here:
 
+### Download the necessary NVIDIA drivers
 ```
-   11  blacklist nvidiafb
-   21  aws s3 cp --recursive s3://ec2-linux-nvidia-drivers/latest/ .
-   23  chmod +x NVIDIA-Linux-x86_64*.run
-   25  sudo /bin/sh ./NVIDIA-Linux-x86_64*.run
-   26  nvidia-smi
-   36  nvidia-smi -q | head
+aws s3 cp --recursive s3://ec2-linux-nvidia-drivers/latest/ .
+chmod +x NVIDIA-Linux-x86_64*.run
+sudo /bin/sh ./NVIDIA-Linux-x86_64*.run
 ```
-
+### Install drivers and configuration for NVIDIA
+- Update packages and reboot
 ```
- 3  sudo apt-get update -y
-    4  sudo apt-get upgrade -y linux-aws
-    5  sudo reboot now
-    6  sudo apt-get install -y gcc make linux-headers-$(uname -r)
-    7  cat << EOF | sudo tee --append /etc/modprobe.d/blacklist.conf
-    8  blacklist vga16fb
-    9  blacklist nouveau
-   10  blacklist rivafb
-   11  blacklist nvidiafb
-   12  blacklist rivatv
-   13  EOF
-   14  GRUB_CMDLINE_LINUX="rdblacklist=nouveau"
-   15  vi /etc/default/grub
-   16  sudo vi /etc/default/grub
-   17  sudo update-grub
-   18  aws --version
-   19  sudo apt install awscli
-   20  aws
-   21  aws s3 cp --recursive s3://ec2-linux-nvidia-drivers/latest/ .
-   22  ls -l
-   23  chmod +x NVIDIA-Linux-x86_64*.run
-   24  ls -l
-   25  sudo /bin/sh ./NVIDIA-Linux-x86_64*.run
-   26  nvidia-smi
+sudo apt-get update -y
+sudo apt-get upgrade -y linux-aws
+sudo reboot now
+```
+- Install gcc and configure OS
+```
+sudo apt-get install -y gcc make linux-headers-$(uname -r)
 
+cat << EOF | sudo tee --append /etc/modprobe.d/blacklist.conf
+blacklist vga16fb
+blacklist nouveau
+blacklist rivafb
+blacklist nvidiafb
+blacklist rivatv
+EOF
+```
+- Add this line to /etc/default/grub
+```
+GRUB_CMDLINE_LINUX="rdblacklist=nouveau"
+```
+- Update grub
+```
+sudo update-grub
+```
+- Install AWS CLI
+```
+sudo apt install awscli
+# verify installation
+aws --version
+```
+- Test that NVIDIA CUDA drivers are installed:
+```
+nvidia-smi -q | head
+
+==============NVSMI LOG==============
+
+Timestamp                                 : Tue Mar 12 17:36:49 2024
+Driver Version                            : 535.154.05
+CUDA Version                              : 12.2
+
+Attached GPUs                             : 1
+GPU 00000000:00:1E.0
+    Product Name                          : NVIDIA A10G
 ```
 
 
