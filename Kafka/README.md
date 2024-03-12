@@ -79,7 +79,8 @@ python3 get-pip.py
 python3 -m pip install pyspark
 python3 -m pip install faker boto3
 python3 -m pip install aws-msk-iam-sasl-signer-python
-# Modify .bashrc
+```
+### Modify .bashrc
 ```
 vi .bashrc
 ```
