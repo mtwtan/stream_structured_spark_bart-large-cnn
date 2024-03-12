@@ -122,14 +122,26 @@ cp aws-msk-iam-auth-2.0.3-all.jar /opt/spark/jars/
 sudo apt install maven
 ```
 
+## Install Delta Lake jars
 ```
-   96  python3 -m pip install jupyterlab
-  117  pip install -U torch tensorflow transformers bitsandbytes>=0.39.0 accelerate
-  120  python3 -m pip install pyspark
-  131  python3 -m pip install boto3
-  245  python3 -m pip install faker
-  365  python3 -m pip install delta-spark==3.1.0
-  421  python3 -m pip install datasets
-  423  python3 -m pip install tensorrt
-  424  python3 -m pip install chunkipy
+mkdir delta
+cd delta
+curl -O https://raw.githubusercontent.com/mtwtan/stream_structured_spark_bart-large-cnn/main/setup/pom.xml
+mvn clean install -f pom.xml
+
+cd target
+cp delta-spark-uber-1.0.0.jar /opt/spark/jars/
+```
+
+## Install Python libraries and Jupyter Lab
+```
+python3 -m pip install jupyterlab
+python3 -m pip install -U torch tensorflow transformers bitsandbytes>=0.39.0 accelerate
+python3 -m pip install pyspark
+python3 -m pip install boto3
+python3 -m pip install faker
+python3 -m pip install delta-spark==3.1.0
+python3 -m pip install datasets
+python3 -m pip install tensorrt
+python3 -m pip install chunkipy
 ```
