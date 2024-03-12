@@ -146,3 +146,27 @@ EOF
 kafka-topics.sh --create --bootstrap-server=$broker --command-config client-config.properties --replication-factor 3 --partitions 3 --topic amznbookreviews
 
 ```
+## Run the Kafka generator script
+
+- Start up Spark
+
+```
+cd /opt/spark/sbin
+./start-master.sh
+./start-worker.sh spark://< SPARK MASTER IP ADDRESS >:7077
+```
+
+- Download the Kafka generator script
+
+```
+cd $BASEDIR
+mkdir scripts
+https://raw.githubusercontent.com/mtwtan/stream_structured_spark_bart-large-cnn/main/Kafka/Kafka-generator.py
+
+```
+- Run the Kafka generator script
+
+```
+cd scripts
+spark-submit --master spark://< SPARK MASTER IP ADDRESS >:7077 kafka-generator.py
+```
