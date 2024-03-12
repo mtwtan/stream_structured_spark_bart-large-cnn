@@ -91,19 +91,30 @@ sudo apt install openjdk-17-jdk
 java -version
 ```
 
+## Download JAR files for Spark
 ```
-  155  curl -O https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.6/hadoop-aws-3.3.6.jar
-  170  curl -O https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.665/aws-java-sdk-bundle-1.12.665.jar
-  194  curl -O https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-common/3.3.6/hadoop-common-3.3.6.jar
-  304  curl -O https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.7.0/kafka-clients-3.7.0.jar
-  306  curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.5.1/spark-sql-kafka-0-10_2.12-3.5.1.jar
-  310  curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.5.1/spark-token-provider-kafka-0-10_2.12-3.5.1.jar
-  325  curl -O https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.12.0/commons-pool2-2.12.0.jar
+mkdir /tmp/jars
+cd /tmp/jars
 
-```
+curl -O https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.6/hadoop-aws-3.3.6.jar
+curl -O https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.665/aws-java-sdk-bundle-1.12.665.jar
+curl -O https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-common/3.3.6/hadoop-common-3.3.6.jar
+curl -O https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.7.0/kafka-clients-3.7.0.jar
+curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.5.1/spark-sql-kafka-0-10_2.12-3.5.1.jar
+curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.5.1/spark-token-provider-kafka-0-10_2.12-3.5.1.jar
+curl -O https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.12.0/commons-pool2-2.12.0.jar
 
+cp *.jar /opt/spark/jars/
 ```
-Download aws-msk-iam-auth-2.0.3-all.jar
+## Download jar file for IAM Authentication with MSK
+- Download this ALL jar package from GitHub. You will need a browser to properly download this file; running a curl will only get you a 302 redirect. The [download link is here](https://github.com/aws/aws-msk-iam-auth/releases/download/v2.0.3/aws-msk-iam-auth-2.0.3-all.jar).
+- After downloading the file, scp the file into your EC2 instance
+```
+# From your computer after ownloading aws-msk-iam-auth-2.0.3-all.jar
+scp -i <key pem file> aws-msk-iam-auth-2.0.3-all.jar ubuntu@< EC2 IP address>:/home/ubuntu/
+
+# From inside your EC2 instance
+cp aws-msk-iam-auth-2.0.3-all.jar /opt/spark/jars/
 ```
 
 ## Install Maven
