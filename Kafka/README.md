@@ -50,6 +50,20 @@ curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kaf
 
 sudo cp *.jar /opt/spark/jars/
 
+```
+## Download jar file for IAM Authentication with MSK
+- Download this ALL jar package from GitHub. You will need a browser to properly download this file; running a curl will only get you a 302 redirect. The [download link is here](https://github.com/aws/aws-msk-iam-auth/releases/download/v2.0.3/aws-msk-iam-auth-2.0.3-all.jar).
+- After downloading the file, scp the file into your EC2 instance
+```
+# From your computer after ownloading aws-msk-iam-auth-2.0.3-all.jar
+scp -i <key pem file> aws-msk-iam-auth-2.0.3-all.jar ubuntu@< EC2 IP address>:/home/ubuntu/
+
+# From inside your EC2 instance
+cp aws-msk-iam-auth-2.0.3-all.jar /opt/spark/jars/
+```
+## Continue ...
+```
+
 cd $BASEDIR
 
 # Install Kafka client
@@ -69,9 +83,65 @@ python3 -m pip install aws-msk-iam-sasl-signer-python
 ```
 vi .bashrc
 ```
-- Modify your .bashrc to include the following:
+- Modify your .bashrc to include the following (add to the bottom of your .bashrc):
 
 ```
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export HADOOP_HOME="/opt/hadoop"
+export SCALA_HOME="/opt/scala"
+export SPARK_HOME="/opt/spark"
+export PYSPARK_PYTHON="/usr/bin/python3"
+export SPARK_DIST_CLASSPATH=$HADOOP_HOME/etc/hadoop/*:$HADOOP_HOME/share/hadoop/common/lib/*:$HADOOP_HOME/share/hadoop/common/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/hdfs/lib/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/yarn/lib/*:$HADOOP_HOME/share/hadoop/yarn/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*:$HADOOP_HOME/share/hadoop/mapreduce/*:$HADOOP_HOME/share/hadoop/tools/lib/*
+export KAFKA_HOME="/opt/kafka"
+export MAVEN="/opt/maven"
+
+PATH="/home/ubuntu/.local/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin:$SCALA_HOME/bin:$MAVEN/bin:$KAFKA_HOME/bin:$PATH"
+export PATH
+
+#export CLASSPATH="$SPARK_HOME/jars/*"
+export CLASSPATH="/home/ubuntu/kafka/jars/*"
+#export CLASSPATH="/opt/spark/jars/aws-msk-iam-auth-2.0.3.jar:/opt/spark/jars/aws-java-sdk-bundle-1.12.667.jar:/home/ubuntu/kafka/auth-2.24.12.jar"
+
+## Add the BROKER URL from your MSK Serverless
+export broker=boot-XXXXXXXXX.c1.kafka-serverless.us-east-1.amazonaws.com:9098
+export region=us-east-1
 ```
+### Source your .bashrc to get the global variables
+
+```
+cd $BASEDIR
+source .bashrc
+```
+
+## Create Kafka topic
+
+```
+cd $BASEDIR
+mkdir kafka
+cd kafka
+
+# Create configuration properties file
+#-----------------------------
+
+tee client-config.properties <<EOF
+# Sets up TLS for encryption and SASL for authN.
+security.protocol = SASL_SSL
+
+# Identifies the SASL mechanism to use.
+sasl.mechanism = AWS_MSK_IAM
+
+# Binds SASL client implementation.
+sasl.jaas.config = software.amazon.msk.auth.iam.IAMLoginModule required;
+
+# Encapsulates constructing a SigV4 signature based on extracted credentials.
+# The SASL client bound by "sasl.jaas.config" invokes this class.
+sasl.client.callback.handler.class = software.amazon.msk.auth.iam.IAMClientCallbackHandler
+EOF
+
+#-----------------------------
+
+# Creating the Kafka topic
+
+kafka-topics.sh --create --bootstrap-server=$broker --command-config client-config.properties --replication-factor 3 --partitions 3 --topic amznbookreviews
 
 ```
