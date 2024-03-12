@@ -63,7 +63,7 @@ GPU 00000000:00:1E.0
     Product Name                          : NVIDIA A10G
 ```
 
-## Install Hadoop, Maven, Scala, and Spark
+## Install Hadoop, Scala, and Spark
 
 ```
 curl -O https://dlcdn.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
@@ -100,6 +100,15 @@ java -version
   310  curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.5.1/spark-token-provider-kafka-0-10_2.12-3.5.1.jar
   325  curl -O https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.12.0/commons-pool2-2.12.0.jar
 
+```
+
+```
+Download aws-msk-iam-auth-2.0.3-all.jar
+```
+
+## Install Maven
+```
+sudo apt install maven
 ```
 
 ```
