@@ -63,57 +63,44 @@ GPU 00000000:00:1E.0
     Product Name                          : NVIDIA A10G
 ```
 
+## Install Hadoop, Maven, Scala, and Spark
 
 ```
-   37  curl -O https://dlcdn.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
-   38  ls -l
-   39  curl -O https://archive.apache.org/dist/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz
-   40  ls -l
-   41  tar -xvf hadoop-3.3.6.tar.gz
-   42  ls -l
-   43  tar -xvf spark-3.5.0-bin-hadoop3.tgz
-   44  ls -l
-   45  sudo mv hadoop-3.3.6 /opt/
-   46  ls -l /opt
-   47  sudo mv spark-3.5.0-bin-hadoop3 /opt/
-   48  ls -l
-   49  df -h
-   50  cd /opt
-   51  ls -l
-   52  sudo ln -s hadoop-3.3.6 hadoop
-   53  sudo ln -s spark-3.5.0-bin-hadoop3 spark
+curl -O https://dlcdn.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+curl -O https://archive.apache.org/dist/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz
+curl -O https://downloads.lightbend.com/scala/2.13.12/scala-2.13.12.tgz
+
+tar -xvf hadoop-3.3.6.tar.gz
+tar -xvf spark-3.5.0-bin-hadoop3.tgz
+tar -xvf scala-2.13.12.tgz
+
+sudo mv hadoop-3.3.6 /opt/
+sudo mv spark-3.5.0-bin-hadoop3 /opt/
+sudo mv scala-2.13.12 /opt/
+
+cd /opt
+sudo ln -s hadoop-3.3.6 hadoop
+sudo ln -s spark-3.5.0-bin-hadoop3 spark
+ln -s scala-2.13.12 scala
 
 ```
-
+## Install Java
 ```
-   55  java -version
-   56  sudo apt search openjdk-17
-   57  sudo apt search openjdk-17 | grep openjdk-17
-   58  sudo apt install openjdk-17-jdk
-   59  sudo apt search openjdk-17 | grep openjdk-17
-   60  java -version
-
+sudo apt install openjdk-17-jdk
+# Verify Java version
+java -version
 ```
 
 ```
-   67  curl -O https://downloads.lightbend.com/scala/2.13.12/scala-2.13.12.tgz
-   68  ls -l
-   69  tar -xvf scala-2.13.12.tgz
-   70  tar -xvf scala-2.13.12
-   71  ls -l
-   72  sudo mv scala-2.13.12 /opt/
-   73  ls -l
-   74  df -h
-   75  ls -l
-   76  vi .bashrc
-   77  cd /opt
-   78  ls -l
-   79  ln -s scala-2.13.12 scala
-   80  sudo ln -s scala-2.13.12 scala
+  155  curl -O https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.6/hadoop-aws-3.3.6.jar
+  170  curl -O https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.665/aws-java-sdk-bundle-1.12.665.jar
+  194  curl -O https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-common/3.3.6/hadoop-common-3.3.6.jar
+  304  curl -O https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.7.0/kafka-clients-3.7.0.jar
+  306  curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.5.1/spark-sql-kafka-0-10_2.12-3.5.1.jar
+  310  curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.5.1/spark-token-provider-kafka-0-10_2.12-3.5.1.jar
+  325  curl -O https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.12.0/commons-pool2-2.12.0.jar
 
 ```
-
-
 
 ```
    96  python3 -m pip install jupyterlab
