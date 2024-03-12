@@ -9,6 +9,12 @@
 
 - For Ubuntu, some of the instructions above don't apply since Ubuntu does not use `yum`. You can follow the steps here:
 
+### Set BASEDIR directory
+```
+export BASEDIR = "/home/ubuntu"
+cd $BASEDIR
+```
+
 ### Download the necessary NVIDIA drivers
 ```
 aws s3 cp --recursive s3://ec2-linux-nvidia-drivers/latest/ .
@@ -66,6 +72,8 @@ GPU 00000000:00:1E.0
 ## Install Hadoop, Scala, and Spark
 
 ```
+cd $BASEDIR
+
 curl -O https://dlcdn.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
 curl -O https://archive.apache.org/dist/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz
 curl -O https://downloads.lightbend.com/scala/2.13.12/scala-2.13.12.tgz
@@ -83,6 +91,7 @@ sudo ln -s hadoop-3.3.6 hadoop
 sudo ln -s spark-3.5.0-bin-hadoop3 spark
 ln -s scala-2.13.12 scala
 
+cd $BASEDIR
 ```
 ## Install Java
 ```
@@ -105,6 +114,8 @@ curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kaf
 curl -O https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.12.0/commons-pool2-2.12.0.jar
 
 cp *.jar /opt/spark/jars/
+
+cd $BASEDIR
 ```
 ## Download jar file for IAM Authentication with MSK
 - Download this ALL jar package from GitHub. You will need a browser to properly download this file; running a curl will only get you a 302 redirect. The [download link is here](https://github.com/aws/aws-msk-iam-auth/releases/download/v2.0.3/aws-msk-iam-auth-2.0.3-all.jar).
@@ -124,6 +135,7 @@ sudo apt install maven
 
 ## Install Delta Lake jars
 ```
+cd $BASEDIR
 mkdir delta
 cd delta
 curl -O https://raw.githubusercontent.com/mtwtan/stream_structured_spark_bart-large-cnn/main/setup/pom.xml
