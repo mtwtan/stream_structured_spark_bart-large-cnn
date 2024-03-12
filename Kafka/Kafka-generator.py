@@ -15,7 +15,7 @@ import sys
 import boto3
 
 ## Variables
-BOOTSTRAP_SERVERS = "boot-uuoa1swb.c1.kafka-serverless.us-east-1.amazonaws.com:9098"
+BOOTSTRAP_SERVERS = "boot-XXXXXXXX.c1.kafka-serverless.us-east-1.amazonaws.com:9098"
 REGION = "us-east-1"
 TOPIC = "amznbookreviews"
 
@@ -25,7 +25,7 @@ MIN_MONTH = 1
 MAX_MONTH = 12
 MIN_DAY = 12
 MAX_DAY = 28
-S3_BUCKET = "amzn-customer-reviews-228924278364"
+S3_BUCKET = "amzn-customer-reviews-XXXXXXXXXXX"
 S3_PREFIX = "amzn-customer-reviews-partitioned/category=Books/"
 
 ## Get S3 user secrets
